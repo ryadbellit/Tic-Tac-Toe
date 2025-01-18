@@ -11,15 +11,22 @@ private:
     char tableau[NB_RANGEES][NB_COLONNES];
 
 public:
+    char (*pTab)[NB_RANGEES];
     Grille()
     {
-        tableau[NB_RANGEES][NB_COLONNES] = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-        char(*pTab)[NB_COLONNES] = tableau;
+        for (int i = 0; i < NB_RANGEES; i++)
+        {
+            for (int j = 0; j < NB_COLONNES; j++)
+            {
+                tableau[i][j] = ' ';
+            }
+        }
+        pTab = tableau;
     };
     void afficherTableau();
-    char trouverGagnant(char (*tableau)[NB_COLONNES]);
-    bool verifierGrillePleine(char (*tableau)[NB_COLONNES]);
-
+    char trouverGagnant();
+    bool verifierGrillePleine();
+    void recommencerJeu();
 
 };
 
@@ -48,14 +55,14 @@ void Grille::afficherTableau()
     std::cout << std::endl;
 }
 
-char Grille::trouverGagnant(char (*tableau)[NB_COLONNES])
+char Grille::trouverGagnant()
 {
 
     for (int i = 0; i < NB_RANGEES; ++i)
     {
         if (tableau[i][0] != ' ' && tableau[i][0] == tableau[i][1] && tableau[i][1] == tableau[i][2])
         {
-            return tableau[i][0]; // Retourne 'X' ou 'O'
+            return tableau[i][0];
         }
     }
 
@@ -64,26 +71,26 @@ char Grille::trouverGagnant(char (*tableau)[NB_COLONNES])
     {
         if (tableau[0][j] != ' ' && tableau[0][j] == tableau[1][j] && tableau[1][j] == tableau[2][j])
         {
-            return tableau[0][j]; // Retourne 'X' ou 'O'
+            return tableau[0][j];
         }
     }
 
     // Vérifier la diagonale principale
     if (tableau[0][0] != ' ' && tableau[0][0] == tableau[1][1] && tableau[1][1] == tableau[2][2])
     {
-        return tableau[0][0]; // Retourne 'X' ou 'O'
+        return tableau[0][0];
     }
 
     // Vérifier la diagonale secondaire
     if (tableau[0][2] != ' ' && tableau[0][2] == tableau[1][1] && tableau[1][1] == tableau[2][0])
     {
-        return tableau[0][2]; // Retourne 'X' ou 'O'
+        return tableau[0][2];
     }
 
     return ' ';
 }
 
-bool Grille::verifierGrillePleine(char (*tableau)[NB_COLONNES])
+bool Grille::verifierGrillePleine()
 {
     for (int i = 0; i < NB_RANGEES; i++)
     {
@@ -96,6 +103,16 @@ bool Grille::verifierGrillePleine(char (*tableau)[NB_COLONNES])
         }
     }
     return true;
+}
+
+void Grille::recommencerJeu() {
+    for (int i = 0; i < NB_RANGEES; i++)
+        {
+            for (int j = 0; j < NB_COLONNES; j++)
+            {
+                tableau[i][j] = ' ';
+            }
+        }
 }
 
 int accepterInputUtilisateur(char joueurEnCours, char (*tableau)[3])
@@ -135,32 +152,34 @@ int afficherTableau(char (*tableau)[NB_COLONNES])
 int main()
 {
 
-    Grille jeu();
+    Grille jeu;
+
     char gagnant = ' ';
     bool tourDesX = true;
     bool grillePleine = false;
     bool veutRejouer = true;
     char reponse = ' ';
     bool partieNonFinie = true;
-    afficherTableau(jeu.pTab);
+
+    jeu.afficherTableau();
 
     while (partieNonFinie && veutRejouer)
     {
 
         if (tourDesX == true)
         {
-            accepterInputUtilisateur('X', pTab);
+            accepterInputUtilisateur('X', jeu.pTab);
         }
 
         else
         {
-            accepterInputUtilisateur('O', pTab);
+            accepterInputUtilisateur('O', jeu.pTab);
         }
 
         tourDesX = !tourDesX;
-        afficherTableau(pTab);
-        gagnant = trouverGagnant(pTab);
-        grillePleine = verifierGrillePleine(tableau);
+        jeu.afficherTableau();
+        gagnant = jeu.trouverGagnant();
+        grillePleine = jeu.verifierGrillePleine();
         partieNonFinie = gagnant == ' ' && grillePleine == false;
 
         if (partieNonFinie == false)
@@ -184,18 +203,12 @@ int main()
             {
                 veutRejouer = true;
 
-                for (int i = 0; i < NB_COLONNES; i++)
-                {
-                    for (int j = 0; j < NB_RANGEES; j++)
-                    {
-                        tableau[i][j] = ' ';
-                    }
-                }
+                jeu.recommencerJeu();
 
                 partieNonFinie = true;
                 tourDesX = true;
                 grillePleine = false;
-                afficherTableau(pTab);
+                jeu.afficherTableau();
             }
 
             else
@@ -206,5 +219,6 @@ int main()
             }
         }
     }
+
     return 0;
 }
