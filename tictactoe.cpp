@@ -12,6 +12,7 @@ private:
 
 public:
     char (*pTab)[NB_RANGEES];
+
     Grille()
     {
         for (int i = 0; i < NB_RANGEES; i++)
@@ -23,11 +24,12 @@ public:
         }
         pTab = tableau;
     };
+
     void afficherTableau();
     char trouverGagnant();
     bool verifierGrillePleine();
     void recommencerJeu();
-
+    void minimaxAlgo();
 };
 
 void Grille::afficherTableau()
@@ -58,7 +60,8 @@ void Grille::afficherTableau()
 char Grille::trouverGagnant()
 {
 
-    for (int i = 0; i < NB_RANGEES; ++i)
+    // Vérifier les rangées
+    for (int i = 0; i < NB_RANGEES; i++)
     {
         if (tableau[i][0] != ' ' && tableau[i][0] == tableau[i][1] && tableau[i][1] == tableau[i][2])
         {
@@ -67,7 +70,7 @@ char Grille::trouverGagnant()
     }
 
     // Vérifier les colonnes
-    for (int j = 0; j < NB_RANGEES; ++j)
+    for (int j = 0; j < NB_RANGEES; j++)
     {
         if (tableau[0][j] != ' ' && tableau[0][j] == tableau[1][j] && tableau[1][j] == tableau[2][j])
         {
@@ -115,7 +118,11 @@ void Grille::recommencerJeu() {
         }
 }
 
-int accepterInputUtilisateur(char joueurEnCours, char (*tableau)[3])
+void Grille::minimaxAlgo() {
+
+}
+
+void accepterInputUtilisateur(char joueurEnCours, char (*tableau)[3])
 {
     int choixRangee = -1;
     int choixColonne = -1;
@@ -141,12 +148,6 @@ int accepterInputUtilisateur(char joueurEnCours, char (*tableau)[3])
 
     tableau[choixRangee - 1][choixColonne - 1] = joueurEnCours;
 
-    return 0;
-}
-
-int afficherTableau(char (*tableau)[NB_COLONNES])
-{
-    std::cout << "FLOPPPPPPPPPP" << std::endl;
 }
 
 int main()
