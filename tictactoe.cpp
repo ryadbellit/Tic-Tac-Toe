@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 const int NB_RANGEES = 3;
 const int NB_COLONNES = 3;
@@ -29,7 +28,7 @@ public:
     char trouverGagnant();
     bool verifierGrillePleine();
     void recommencerJeu();
-    void minimaxAlgo();
+    int trouverScore();
 };
 
 void Grille::afficherTableau()
@@ -118,8 +117,29 @@ void Grille::recommencerJeu() {
         }
 }
 
-void Grille::minimaxAlgo() {
+int Grille::trouverScore() {
+    for (int i = 0; i < NB_RANGEES; i++) {
+        for (int j = 0; j < NB_COLONNES; j++) {
 
+            if (tableau[i][j] != ' ') continue;
+            
+            else {
+                char tableauTemp[NB_RANGEES][NB_COLONNES]; 
+                std::copy(tableau, tableau + NB_COLONNES, tableauTemp);
+                tableauTemp[i][j] == 'O';
+                pTab = tableauTemp;
+
+                if (trouverGagnant() == 'O') {
+                    std::copy(tableauTemp, tableauTemp + NB_COLONNES, tableau);
+                    return -10;
+                }
+            }
+
+        }
+    }
+
+    pTab = tableau;
+    return 10;
 }
 
 void accepterInputUtilisateur(char joueurEnCours, char (*tableau)[3])
@@ -150,6 +170,10 @@ void accepterInputUtilisateur(char joueurEnCours, char (*tableau)[3])
 
 }
 
+void minimaxAlgo() {
+
+}
+
 int main()
 {
 
@@ -167,15 +191,9 @@ int main()
     while (partieNonFinie && veutRejouer)
     {
 
-        if (tourDesX == true)
-        {
-            accepterInputUtilisateur('X', jeu.pTab);
-        }
+        if (tourDesX == true) accepterInputUtilisateur('X', jeu.pTab);
 
-        else
-        {
-            accepterInputUtilisateur('O', jeu.pTab);
-        }
+        else accepterInputUtilisateur('O', jeu.pTab);
 
         tourDesX = !tourDesX;
         jeu.afficherTableau();
@@ -186,15 +204,10 @@ int main()
         if (partieNonFinie == false)
         {
 
-            if (gagnant == ' ')
-            {
-                std::cout << "Egalite! Bravo aux joueurs!";
-            }
+            if (gagnant == ' ') std::cout << "Egalite! Bravo aux joueurs!";
 
-            else
-            {
-                std::cout << "Victoire du joueur : " << gagnant << ". Bien joue!" << std::endl;
-            }
+            else std::cout << "Victoire du joueur : " << gagnant << ". Bien joue!" << std::endl;
+
 
             std::cout << std::endl;
             std::cout << "Voulez vous rejouer? (O/N): " << std::endl;

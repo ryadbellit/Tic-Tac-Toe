@@ -1,0 +1,4 @@
+1. Chercher les coups possibles pour joueur1 et voir si il y en a un qui gagne.
+2. Si oui, le faire choisir au bot directement.
+3. Si non, voir les autres possibilites dans la partie a partir des coups possibles pour le jouer 2.
+4. Repeter etapes 1 a 3.
