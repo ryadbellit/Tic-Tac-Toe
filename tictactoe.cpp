@@ -118,7 +118,7 @@ void Grille::recommencerJeu() {
 }
 
 
-// test pr git
+``
 int Grille::trouverScore() { 
     for (int i = 0; i < NB_RANGEES; i++) {
         for (int j = 0; j < NB_COLONNES; j++) {
